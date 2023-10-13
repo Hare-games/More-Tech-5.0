@@ -25,7 +25,7 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 
     public void OnScroll(PointerEventData eventData)
     {
-        WorldMap.ScrollSIze(eventData.scrollDelta.y * 0.5f);
+        WorldMap.ScrollSIze(eventData.scrollDelta.y);
     }
 
     IEnumerator LoadMapValue(float Latitude, float Longitude)
