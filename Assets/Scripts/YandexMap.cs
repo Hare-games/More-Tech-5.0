@@ -2,47 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using YandexMaps;
 
-public class YandexMap : MonoBehaviour
+public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 {
     public RawImage image;
-    public float Latitude;
-    public float Longitude;
-    public int Size;
 
     public Map.TypeMap typeMap;
     public Map.TypeMapLayer mapLayer;
 
-    private void Start()
+    public void LoadMap(float Latitude, float Longitude)
     {
-        LoadMap();
+        StartCoroutine(LoadMapValue(Latitude, Longitude));
     }
 
-    public void LoadMap()
+    public void OnDrag(PointerEventData data)
+    {
+       WorldMap.AddPos(data.delta * Time.deltaTime * 8);
+    }
+
+    public void OnScroll(PointerEventData eventData)
+    {
+        WorldMap.ScrollSIze(eventData.scrollDelta.y * 0.5f);
+    }
+
+    IEnumerator LoadMapValue(float Latitude, float Longitude)
     {
         Map.EnabledLayer = true;
-        Map.Size = 4;
+        Map.Size = WorldMap.GetSize();
         Map.SetTypeMap = typeMap;
         Map.SetTypeMapLayer = mapLayer;
+        Map.Latitude = Latitude;
+        Map.Longitude = Longitude;
         Map.LoadMap();
-        StartCoroutine(LoadTexture());
-    }
-
-    IEnumerator LoadTexture()
-    {
-        while (true)
-        {
-            Map.LoadMap();
-
-            Map.Latitude = Latitude;
-            Map.Longitude = Longitude;
-            Map.Size = Size;
-
-            yield return new WaitForSeconds(0.05F);
-            image.texture = Map.GetTexture;
-        }
+        yield return new WaitForSeconds(1.4f);
+        image.texture = Map.GetTexture;
     }
 }
 
@@ -55,8 +51,5 @@ public class YandexMapEditor : Editor
         if (map.image == null) return;
 
         map.image = (RawImage)EditorGUILayout.ObjectField("Изображение:", map.image, typeof(RawImage));
-        map.Latitude = EditorGUILayout.FloatField("Широта:", map.Latitude);
-        map.Longitude = EditorGUILayout.FloatField("Долгота:", map.Longitude);
-        map.Size = EditorGUILayout.IntField("Размер:", map.Size);
     }
 }
