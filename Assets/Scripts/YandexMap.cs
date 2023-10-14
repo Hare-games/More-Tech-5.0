@@ -13,9 +13,15 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
     public Map.TypeMap typeMap;
     public Map.TypeMapLayer mapLayer;
 
-    public void LoadMap(float Latitude, float Longitude)
+    private Texture map_piece_texture;
+    public void PreLoadMap(float Latitude, float Longitude)
     {
         StartCoroutine(LoadMapValue(Latitude, Longitude));
+    }
+
+    public void LoadMapTexture()
+    {
+        image.texture = map_piece_texture;
     }
 
     public void OnDrag(PointerEventData data)
@@ -25,6 +31,7 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 
     public void OnScroll(PointerEventData eventData)
     {
+        Debug.Log(eventData.scrollDelta);
         WorldMap.ScrollSIze(eventData.scrollDelta.y);
     }
 
@@ -38,7 +45,7 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         Map.Longitude = Longitude;
         Map.LoadMap();
         yield return new WaitForSeconds(1.4f);
-        image.texture = Map.GetTexture;
+        map_piece_texture = Map.GetTexture;
     }
 }
 

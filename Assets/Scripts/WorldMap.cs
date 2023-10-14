@@ -18,6 +18,9 @@ public class WorldMap : MonoBehaviour
     public int StartX;
     public int StartY;
 
+    public float width_multiply;
+    public float height_miltiply;
+
     public RectTransform canvas;
     public GameObject YandexMap;
     private GameObject[,] YandexWorld;
@@ -53,6 +56,14 @@ public class WorldMap : MonoBehaviour
         StartCoroutine(LoadMap());
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("F");
+            StartCoroutine(LoadMap());
+        }
+    }
     public static void AddPos(Vector2 pos)
     {
         Instance.transform.Translate(pos, Space.Self);
@@ -70,15 +81,28 @@ public class WorldMap : MonoBehaviour
 
     IEnumerator LoadMap()
     {
+        float LoadingProcess = 0;
+        float LoadingSteps = CellX * CellY;
+
         for (int i = 0; i < CellX; i++)
         {
             for (int k = 0; k < CellY; k++)
             {
-                YandexWorld[i, k].GetComponent<YandexMap>().LoadMap(StartLatitude + k * _world_size_square * 2.125f, StartLongitude + i * _world_size_square * 5);
+                YandexWorld[i, k].GetComponent<YandexMap>().PreLoadMap(StartLatitude + k * _world_size_square * width_multiply, StartLongitude + i * _world_size_square * height_miltiply);
                 yield return new WaitForSeconds(1.5f);
+
+                LoadingProcess = i * CellY + k;
+                Debug.Log($"Loading: {LoadingProcess / LoadingSteps}");
             }
         }
+
+        for (int i = 0; i < CellX; i++)
+        {
+            for (int k = 0; k < CellY; k++)
+            {
+                YandexWorld[i, k].GetComponent<YandexMap>().LoadMapTexture();
+            }
+        }
+
     }
-
-
 }
