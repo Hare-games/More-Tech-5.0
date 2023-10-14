@@ -9,10 +9,11 @@ public class OnScreenMap : MonoBehaviour
 
     private void Update()
     {
-        var pos = Camera.main.WorldToScreenPoint(transform.position);
+        var pos = Camera.main.WorldToViewportPoint(transform.position);
         float width = Screen.width;
         float height = Screen.height;
-        Debug.Log(pos.x < width && pos.y < height && pos.x > 0 && pos.y > 0);
+        bool result = pos.x > 0 && pos.x < 1 && pos.y < 1 && pos.y > 0;
+        if (!result) return;
 
         event_sda.Invoke();
     }

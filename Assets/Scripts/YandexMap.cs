@@ -9,12 +9,40 @@ using YandexMaps;
 public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 {
     public static List<YandexMap> LoadedMap = new List<YandexMap>();
+    public static List<Vector2> UsedVectors = new List<Vector2>() { Vector2.zero };
     public RawImage image;
+    public GameObject Loadmap;
 
+    public RectTransform rect;
     public Map.TypeMap typeMap;
     public Map.TypeMapLayer mapLayer;
 
     private Texture map_piece_texture;
+
+    private void Start()
+    {
+        rect = GetComponent<RectTransform>();
+        LoadedMap.Add(this);
+        Vector2 pos_p_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(450, 0);
+        Vector2 pos_m_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(-450, 0);
+        Vector2 pos_p_y = GetComponent<RectTransform>().anchoredPosition + new Vector2(0, 450);
+        Vector2 pos_m_y = GetComponent<RectTransform>().anchoredPosition + new Vector2(0, -450);
+        List<bool> res = new List<bool>() { true, true, true, true };
+
+        foreach (var item in UsedVectors)
+        {
+            if (item == pos_p_x) { res[0] = false; }
+            if (item == pos_m_x) { res[1] = false; }
+            if (item == pos_p_y) { res[2] = false; }
+            if (item == pos_m_y) { res[3] = false; }
+        }
+
+        if (res[0] == true) { UsedVectors.Add(pos_p_x); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_x; }
+        if (res[1] == true) { UsedVectors.Add(pos_m_x); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_x; }
+        if (res[2] == true) { UsedVectors.Add(pos_p_y); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_y; }
+        if (res[3] == true) { UsedVectors.Add(pos_m_y); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_y; }
+    }
+
     public void PreLoadMap(float Latitude, float Longitude)
     {
         StartCoroutine(LoadMapValue(Latitude, Longitude));
@@ -27,7 +55,7 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 
     public void OnDrag(PointerEventData data)
     {
-       WorldMap.AddPos(data.delta * Time.deltaTime * 8);
+        WorldMap.AddPos(data.delta * Time.deltaTime * 8);
     }
 
     public void OnScroll(PointerEventData eventData)
@@ -47,17 +75,5 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         Map.LoadMap();
         yield return new WaitForSeconds(1.4f);
         map_piece_texture = Map.GetTexture;
-    }
-}
-
-[CustomEditor(typeof(YandexMap))]
-public class YandexMapEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        var map = (YandexMap)target;
-        if (map.image == null) return;
-
-        map.image = (RawImage)EditorGUILayout.ObjectField("Изображение:", map.image, typeof(RawImage));
     }
 }

@@ -46,7 +46,7 @@ public class WorldMap : MonoBehaviour
         {
             for (int k = 0; k < CellY; k++)
             {
-                var obj = Instantiate(YandexMap, transform);
+                var obj = Instantiate(YandexMap, transform.parent);
                 obj.GetComponent<RectTransform>().anchoredPosition += new Vector2(i * 900, k * 900);
                 YandexWorld[i, k] = obj;
             }
