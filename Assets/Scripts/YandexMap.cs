@@ -92,8 +92,10 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         Map.SetTypeMapLayer = mapLayer;
         Map.Latitude = Latitude;
         Map.Longitude = Longitude;
+        Debug.Log($"{Latitude},{Longitude}, {size}");
         Map.LoadMap();
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(0.9f);
+        image.color = Color.white;
         map_piece_texture = Map.GetTexture;
         LoadMapTexture();
     }
