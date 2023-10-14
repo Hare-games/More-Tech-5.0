@@ -8,6 +8,7 @@ using YandexMaps;
 
 public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 {
+    public static List<YandexMap> LoadedMap = new List<YandexMap>();
     public RawImage image;
 
     public Map.TypeMap typeMap;

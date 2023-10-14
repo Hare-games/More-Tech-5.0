@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using YandexMaps;
 
 public class WorldMap : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class WorldMap : MonoBehaviour
 
     private void Awake()
     {
+        Map.Height = 450;
+        Map.Width = 450;
         for (int i = 0; i < Size - 1; i++)
         {
             _world_size_square = _world_size_square / 2;
