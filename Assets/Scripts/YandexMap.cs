@@ -24,14 +24,10 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
 
     public GameObject LoadedObject;
 
-    private void Awake()
+    private void Start()
     {
         _animator = GetComponent<Animator>();
         _animator.SetBool("Anim", true);
-    }
-
-    private void Start()
-    {
         rect = GetComponent<RectTransform>();
         LoadedMap.Add(this);
         WorldMap.UpdateList.Add(this);

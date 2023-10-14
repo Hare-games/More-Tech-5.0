@@ -16,28 +16,19 @@ public class WorldMap : MonoBehaviour
     public float StartLatitude; //Широта
     public float StartLongitude; //Долгота
 
-    public int CellX;
-    public int CellY;
-
-    public int StartX;
-    public int StartY;
-
     public float width_multiply;
     public float height_miltiply;
 
     public RectTransform canvas;
 
-    public float _world_size_square = 90;
+    public float _world_size_square;
 
     private void Awake()
     {
+        Instance = this;
         Map.Height = 450;
         Map.Width = 450;
-        for (int i = 0; i < Size - 1; i++)
-        {
-            _world_size_square = _world_size_square / 2;
-        }
-        Instance = this;
+        Map.Size = GetSize();
     }
 
     private void Update()
@@ -85,7 +76,7 @@ public class WorldMap : MonoBehaviour
         float mult_x = unity_pos.x / 450;
         float mult_y = unity_pos.y / 450;
 
-        return new Vector2(Instance.StartX * mult_x * Instance._world_size_square, Instance.StartY * mult_y * Instance._world_size_square);
+        return new Vector2(Instance.StartLongitude * mult_x * Instance._world_size_square, Instance.StartLatitude * mult_y * Instance._world_size_square);
     }
 
     IEnumerator UpdateState(YandexMap map)

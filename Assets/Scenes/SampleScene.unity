@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d170454d99d5c0a44ab9c594cc6e82b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Size: 6
+  Size: 4
   StartLatitude: 51.5406
   StartLongitude: 46.0086
   CellX: 2
