@@ -63,7 +63,6 @@ public class WorldMap : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("F");
             StartCoroutine(LoadMap());
         }
     }

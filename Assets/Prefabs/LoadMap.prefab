@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.40000004, g: 0.49411768, b: 0.7019608, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,21 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd0fdec558886ac46ba16f9fc599c721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  event_sda:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3906930043359371101}
-        m_TargetAssemblyTypeName: LoadedMap, Assembly-CSharp
-        m_MethodName: LoadYandexMap
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  Loaded: {fileID: 3906930043359371101}
 --- !u!1 &6489027565230520217
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +192,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: e709937c1a49f68499ffc25fa3da4fce, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0

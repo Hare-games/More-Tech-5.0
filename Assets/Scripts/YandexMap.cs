@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -17,12 +18,23 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
     public Map.TypeMap typeMap;
     public Map.TypeMapLayer mapLayer;
 
+    private Animator _animator;
+
     private Texture map_piece_texture;
+
+    public GameObject LoadedObject;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+        _animator.SetBool("Anim", true);
+    }
 
     private void Start()
     {
         rect = GetComponent<RectTransform>();
         LoadedMap.Add(this);
+
         Vector2 pos_p_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(450, 0);
         Vector2 pos_m_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(-450, 0);
         Vector2 pos_p_y = GetComponent<RectTransform>().anchoredPosition + new Vector2(0, 450);
@@ -37,10 +49,15 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
             if (item == pos_m_y) { res[3] = false; }
         }
 
-        if (res[0] == true) { UsedVectors.Add(pos_p_x); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_x; }
-        if (res[1] == true) { UsedVectors.Add(pos_m_x); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_x; }
-        if (res[2] == true) { UsedVectors.Add(pos_p_y); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_y; }
-        if (res[3] == true) { UsedVectors.Add(pos_m_y); Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_y; }
+        if (res[0] == true) UsedVectors.Add(pos_p_x);
+        if (res[1] == true) UsedVectors.Add(pos_m_x);
+        if (res[2] == true) UsedVectors.Add(pos_p_y);
+        if (res[3] == true) UsedVectors.Add(pos_m_y);
+
+        if (res[0] == true) { Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_x; }
+        if (res[1] == true) { Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_x; }
+        if (res[2] == true) { Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_p_y; }
+        if (res[3] == true) { Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_y; }
     }
 
     public void PreLoadMap(float Latitude, float Longitude)
@@ -62,6 +79,12 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
     {
         Debug.Log(eventData.scrollDelta);
         WorldMap.ScrollSIze(eventData.scrollDelta.y);
+    }
+
+    public void SetAnimOff()
+    {
+        _animator.SetBool("Anim", false);
+        Destroy(LoadedObject);
     }
 
     IEnumerator LoadMapValue(float Latitude, float Longitude)

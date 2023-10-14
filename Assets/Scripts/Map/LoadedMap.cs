@@ -24,13 +24,16 @@ public class LoadedMap : MonoBehaviour
         _anim.SetBool("Anim", false);
     }
 
-    public void LoadYandexMap()
+    public bool LoadYandexMap()
     {
-        if (!Inited) return;
+        if (!Inited) return false;
+        // Destroy(transform.GetChild(0));
 
         var obj = Instantiate(YandexMap, transform.parent);
         obj.GetComponent<RectTransform>().anchoredPosition = _rect.anchoredPosition;
-        Destroy(gameObject);
+        obj.GetComponent<YandexMap>().LoadedObject = gameObject;
+
+        return true;
     }
 
     IEnumerator PlayAnim()
