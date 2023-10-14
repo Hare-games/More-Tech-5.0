@@ -34,6 +34,7 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
     {
         rect = GetComponent<RectTransform>();
         LoadedMap.Add(this);
+        WorldMap.UpdateList.Add(this);
 
         Vector2 pos_p_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(450, 0);
         Vector2 pos_m_x = GetComponent<RectTransform>().anchoredPosition + new Vector2(-450, 0);
@@ -60,9 +61,9 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         if (res[3] == true) { Instantiate(Loadmap, transform.parent).GetComponent<RectTransform>().anchoredPosition = pos_m_y; }
     }
 
-    public void PreLoadMap(float Latitude, float Longitude)
+    public void PreLoadMap(float Latitude, float Longitude, int size)
     {
-        StartCoroutine(LoadMapValue(Latitude, Longitude));
+        StartCoroutine(LoadMapValue(Latitude, Longitude, size));
     }
 
     public void LoadMapTexture()
@@ -87,10 +88,10 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         Destroy(LoadedObject);
     }
 
-    IEnumerator LoadMapValue(float Latitude, float Longitude)
+    IEnumerator LoadMapValue(float Latitude, float Longitude, int size)
     {
         Map.EnabledLayer = true;
-        Map.Size = WorldMap.GetSize();
+        Map.Size = size;
         Map.SetTypeMap = typeMap;
         Map.SetTypeMapLayer = mapLayer;
         Map.Latitude = Latitude;
@@ -98,5 +99,6 @@ public class YandexMap : MonoBehaviour, IDragHandler, IScrollHandler
         Map.LoadMap();
         yield return new WaitForSeconds(1.4f);
         map_piece_texture = Map.GetTexture;
+        LoadMapTexture();
     }
 }

@@ -27,7 +27,6 @@ public class LoadedMap : MonoBehaviour
     public bool LoadYandexMap()
     {
         if (!Inited) return false;
-        // Destroy(transform.GetChild(0));
 
         var obj = Instantiate(YandexMap, transform.parent);
         obj.GetComponent<RectTransform>().anchoredPosition = _rect.anchoredPosition;

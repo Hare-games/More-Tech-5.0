@@ -6,6 +6,9 @@ using YandexMaps;
 
 public class WorldMap : MonoBehaviour
 {
+    public static List<YandexMap> UpdateList = new List<YandexMap>();
+    bool continue_update = true;
+
     public static WorldMap Instance;
 
     public int Size;
@@ -23,10 +26,8 @@ public class WorldMap : MonoBehaviour
     public float height_miltiply;
 
     public RectTransform canvas;
-    public GameObject YandexMap;
-    private GameObject[,] YandexWorld;
 
-    private float _world_size_square = 90;
+    public float _world_size_square = 90;
 
     private void Awake()
     {
@@ -39,31 +40,16 @@ public class WorldMap : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private void Update()
     {
-        YandexWorld = new GameObject[CellX, CellY];
-        for (int i = 0; i < CellX; i++)
+        if (continue_update)
         {
-            for (int k = 0; k < CellY; k++)
+            if (UpdateList.Count > 0)
             {
-                var obj = Instantiate(YandexMap, transform.parent);
-                obj.GetComponent<RectTransform>().anchoredPosition += new Vector2(i * 900, k * 900);
-                YandexWorld[i, k] = obj;
+                continue_update = false;
+                StartCoroutine(UpdateState(UpdateList[0]));
+                UpdateList.RemoveAt(0);
             }
-        }
-
-        GetComponent<RectTransform>().anchoredPosition -= new Vector2(450 * (CellX-1), 450 * (CellY-1));// new Vector2(450/2, 450/2);
-        StartLatitude = StartLatitude - CellX * _world_size_square;
-        StartLongitude = StartLongitude - CellY * _world_size_square;
-
-        StartCoroutine(LoadMap());
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            StartCoroutine(LoadMap());
         }
     }
     public static void AddPos(Vector2 pos)
@@ -81,30 +67,32 @@ public class WorldMap : MonoBehaviour
         return Instance.Size;
     }
 
-    IEnumerator LoadMap()
+    public static void SetSize(int size)
     {
-        float LoadingProcess = 0;
-        float LoadingSteps = CellX * CellY;
+        Instance.Size = size;
+        float world_size_sq = 90f;
 
-        for (int i = 0; i < CellX; i++)
+        for (int i = 0; i < Instance.Size - 1; i++)
         {
-            for (int k = 0; k < CellY; k++)
-            {
-                YandexWorld[i, k].GetComponent<YandexMap>().PreLoadMap(StartLatitude + k * _world_size_square * width_multiply, StartLongitude + i * _world_size_square * height_miltiply);
-                yield return new WaitForSeconds(1.5f);
-
-                LoadingProcess = i * CellY + k;
-                Debug.Log($"Loading: {LoadingProcess / LoadingSteps}");
-            }
+            world_size_sq = world_size_sq / 2;
         }
 
-        for (int i = 0; i < CellX; i++)
-        {
-            for (int k = 0; k < CellY; k++)
-            {
-                YandexWorld[i, k].GetComponent<YandexMap>().LoadMapTexture();
-            }
-        }
+        Instance._world_size_square = world_size_sq;
+    }
 
+    public static Vector2 GetWorldPos(Vector2 unity_pos)
+    {
+        float mult_x = unity_pos.x / 450;
+        float mult_y = unity_pos.y / 450;
+
+        return new Vector2(Instance.StartX * mult_x * Instance._world_size_square, Instance.StartY * mult_y * Instance._world_size_square);
+    }
+
+    IEnumerator UpdateState(YandexMap map)
+    {
+        Vector2 world_pos = GetWorldPos(new Vector2(map.transform.position.x, map.transform.position.y));
+        YandexMap.LoadedMap.ForEach(x => x.PreLoadMap(world_pos.x, world_pos.y, GetSize()));
+        yield return new WaitForSeconds(1.5f);
+        continue_update = true;
     }
 }
