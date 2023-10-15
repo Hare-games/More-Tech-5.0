@@ -85,13 +85,22 @@ public class WorldMap : MonoBehaviour
 
     public static int GetSize()
     {
+        Instance.width_multiply = Instance.width_arr[Instance.Size];
+        float world_size_sq = 90f;
+
+        for (int i = 0; i < Instance.Size - 2; i++)
+        {
+            world_size_sq = world_size_sq / 2;
+        }
+
+        Instance._world_size_square = world_size_sq;
         return Instance.Size;
     }
 
     public static void SetSize(int size)
     {
-        Instance.width_multiply = Instance.width_arr[size];
         Instance.Size = size;
+        Instance.width_multiply = Instance.width_arr[size];
         float world_size_sq = 90f;
 
         for (int i = 0; i < Instance.Size - 2; i++)
