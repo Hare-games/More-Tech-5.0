@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.easyar.sense": {
+      "version": "file:/Users/user/Downloads/com.easyar.sense-4.6.2+3022.b15d4240.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      }
+    },
     "com.unity.2d.animation": {
       "version": "9.0.3",
       "depth": 1,
