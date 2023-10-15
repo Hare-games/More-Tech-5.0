@@ -30,10 +30,10 @@ MonoBehaviour:
     APISecret: 
     SparseSpatialMapAppID: 
   GlobalCloudRecognizerServiceConfig:
-    ServerAddress: 
-    APIKey: 
-    APISecret: 
-    CloudRecognizerAppID: 
+    ServerAddress: https://e3948d5ced4a611db7302a80db2e0848.na1.crs.easyar.com:8443
+    APIKey: dd28dfcba15177f9161183c5aafa0453
+    APISecret: 130989675248da91c14f19e70fd971b9c2706bffee6eff18d177a27d42d23ab8
+    CloudRecognizerAppID: 0594716f393d70390a3b9e46a86c9035
   GlobalMegaLocalizationServiceConfig:
     ServerAddress: 
     APIKey: 
